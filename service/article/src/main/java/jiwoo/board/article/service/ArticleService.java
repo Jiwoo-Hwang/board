@@ -4,6 +4,7 @@ import jiwoo.board.article.entity.Article;
 import jiwoo.board.article.repository.ArticleRepository;
 import jiwoo.board.article.service.request.ArticleCreateRequest;
 import jiwoo.board.article.service.request.ArticleUpdateRequest;
+import jiwoo.board.article.service.response.ArticlePageResponse;
 import jiwoo.board.article.service.response.ArticleResponse;
 import kuke.board.common.snowflake.Snowflake;
 import lombok.RequiredArgsConstructor;
@@ -39,4 +40,17 @@ public class ArticleService {
     public void delete(Long articleId) {
         articleRepository.deleteById(articleId);
     }
+
+    public ArticlePageResponse readAll(Long boardId, Long page, Long pageSize) {
+        return ArticlePageResponse.of(
+                articleRepository.findAll(boardId, (page - 1) * pageSize, pageSize).stream()
+                        .map(ArticleResponse::from)
+                        .toList(),
+                articleRepository.count(
+                        boardId,
+                        PageLimitCalculator.calculatePageLimit(page, pageSize, 10L)
+                )
+        );
+    }
+
 }

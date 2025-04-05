@@ -3,7 +3,9 @@ package jiwoo.board.article.controller;
 import jiwoo.board.article.service.ArticleService;
 import jiwoo.board.article.service.request.ArticleCreateRequest;
 import jiwoo.board.article.service.request.ArticleUpdateRequest;
+import jiwoo.board.article.service.response.ArticlePageResponse;
 import jiwoo.board.article.service.response.ArticleResponse;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,6 +17,15 @@ public class ArticleController {
     @GetMapping("/v1/articles/{articleId}")
     public ArticleResponse read(@PathVariable Long articleId) {
         return articleService.read(articleId);
+    }
+
+    @GetMapping("/v1/articles")
+    public ArticlePageResponse readAll(
+            @RequestParam("boardId") Long boardId,
+            @RequestParam("page") Long page,
+            @RequestParam("pageSize") Long pageSize
+    ) {
+        return articleService.readAll(boardId, page, pageSize);
     }
 
     @PostMapping("/v1/articles")

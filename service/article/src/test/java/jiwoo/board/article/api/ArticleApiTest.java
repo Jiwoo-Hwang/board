@@ -1,5 +1,6 @@
 package jiwoo.board.article.api;
 
+import jiwoo.board.article.service.response.ArticlePageResponse;
 import jiwoo.board.article.service.response.ArticleResponse;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -59,6 +60,19 @@ public class ArticleApiTest {
                 .uri("/v1/articles/{articleId}", 164729975996022784L)
                 .retrieve()
                 .toBodilessEntity();
+    }
+
+    @Test
+    void readAllTest() {
+        ArticlePageResponse response = restClient.get()
+                .uri("/v1/articles?boardId=1&pageSize=30&page=50000")
+                .retrieve()
+                .body(ArticlePageResponse.class);
+
+        System.out.println("response.getArticleCount() = " + response.getArticleCount());
+        for (ArticleResponse article : response.getArticles()) {
+            System.out.println("article = " + article.getArticleId());
+        }
     }
 
     @Getter
