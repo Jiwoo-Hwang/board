@@ -49,6 +49,7 @@ public class CommentService {
         );
     }
 
+    @Transactional
     public void delete(Long commentId) {
         commentRepository.findById(commentId)
                 .filter(not(Comment::getDeleted))
